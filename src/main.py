@@ -13,6 +13,7 @@ config.read("config.conf")
 try:
     GITHUB_USERNAME = config["github"]["username"]
     GITHUB_TOKEN = config["github"]["token"]
+    GITLAB_USERNAME = config["gitlab"]["username"]
     GITLAB_TOKEN = config["gitlab"]["token"]
 except KeyError as e:
     print(f"[X] Error: Missing required key in 'config.conf': {e}")
@@ -50,7 +51,7 @@ for repo in gh_repos:
     if gl_create_res.status_code == 201:
         project_id = gl_create_res.json()["id"]
         print(f"    [v] GitLab project created successfully. ID: {project_id}")
-
+        
         mirror_data = {
             "import_url": github_clone_url,
             "mirror": "true",
@@ -65,4 +66,5 @@ for repo in gh_repos:
     else:
         print(f"    [X] Failed to create GitLab project (It might already exist): {gl_create_res.text}")
 
-print("\n[!] Operation complete! You can now safely push this script to GitHub.")
+print("\n[!] Operation complete! All repositories are safely bridged.")
+
